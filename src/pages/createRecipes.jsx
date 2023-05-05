@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import { GrAddCircle } from "react-icons/gr";
 import axios from "axios";
+import { userGetUserId } from "../hooks/useGetUserId";
+import {useNavigate} from 'react-router-dom';
 
 export default function CreateRecipes() {
+
+  const userID = userGetUserId();
   const [recipe, setRecipe] = useState({
     name: "",
     ingredients: [],
     instructions: "",
     imageUrl: "",
     cookingTime: 0,
-    userOwer: 0,
+    userOwner: userID,
   });
+
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,7 +38,7 @@ export default function CreateRecipes() {
     e.preventDefault();
     try {
       await axios.post('http://localhost:3001/recipes', recipe);
-      alert('Recipe create');
+      navigate('/');
     } catch (error) {
       console.error(error);
     }
@@ -95,6 +101,7 @@ export default function CreateRecipes() {
               />
             ))}
             <button
+              type="button"
               onClick={addIngredient}
               className="bg-green-500 rounded-full flex justify-center items-center text-white gap-3 cursor-pointer"
             >
