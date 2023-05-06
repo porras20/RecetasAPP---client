@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Form from "./Form";
 import axios from "axios"
-import {useCookies} from "react-cookie"
+import {Cookies, useCookies} from "react-cookie"
 import { useNavigate } from "react-router-dom";
 
 
@@ -21,6 +21,7 @@ export default function Login() {
         });
         setCookies('access_token', response.data.token);
         window.localStorage.setItem('userID', response.data.userID);
+        console.log(response.data.userID);
         navigate('/');
     } catch (err) {
         console.error(err);
