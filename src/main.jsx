@@ -5,14 +5,16 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
-
+import { SnackbarProvider } from "notistack";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Navbar />
-      <App />
-      <Footer />
-    </BrowserRouter>
+    <SnackbarProvider maxSnack={3}>
+      <BrowserRouter>
+        <Navbar />
+        <App />
+        <Footer />
+      </BrowserRouter>
+    </SnackbarProvider>
   </React.StrictMode>
 );
