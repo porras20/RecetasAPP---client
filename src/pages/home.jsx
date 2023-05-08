@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiDish, BiTimer } from "react-icons/bi";
 import { TbSalt } from "react-icons/tb";
+import { FaRegBookmark, FaBookmark } from "react-icons/fa";
+import { userGetUserId } from "../hooks/useGetUserId";
 import {
   MdOutlineIntegrationInstructions,
   MdFavoriteBorder,
@@ -10,7 +12,9 @@ import {
 
 export default function Home() {
   const [recipes, setRecipes] = useState([]);
-  const [savedRecipe, setSavedRecipe] = useState(false);
+  const [savedRecipes, setSavedRecipes] = useState([]);
+
+  const userID = userGetUserId();
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -21,12 +25,37 @@ export default function Home() {
         console.error(error);
       }
     };
+
+    const fetchSavedRecipe = async () => {
+      try {
+        const response = await axios.get(
+          ` http://localhost:3001/recipes/savedRecipes/ids/${userID}`
+        );
+        setSavedRecipes(response.data.savedRecipes);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchSavedRecipe();
     fetchRecipe();
   }, []);
   // añadir dependiencias recipes
-  const handleSavedRecipe = () => {
-    setSavedRecipe(!savedRecipe);
+
+  const saveRecipe = async (recipeId) => {
+    console.log("si");
+    try {
+      const response = await axios.put("http://localhost:3001/recipes", {
+        recipeId,
+        userID,
+      });
+      setSavedRecipes(response.data.savedRecipes);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const isRecipeSaved = (id) => savedRecipes.includes(id);
+
   return (
     <div className="flex items-center my-5 mx-auto flex-col text-center">
       <h2 className="text-2xl font-[Poppins] text-gray-700 uppercase font-bold">
@@ -38,26 +67,33 @@ export default function Home() {
             key={recipe._id}
             className="bg-neutral-200 rounded-lg shadow py-5 flex flex-col items-center w-full gap-5"
           >
+            <div>
+              {savedRecipes.includes(recipe._id) && <h2>Alredy saved</h2>}
+            </div>
             <div className="w-full flex justify-center">
               <h2 className="flex justify-center items-center gap-3 font-[Poppins] text-3xl capitalize font-bold text-gray-600 mt-5">
                 {recipe.name} <BiDish />
-                <div
-                  className="cursor-pointer"
-                  onClick={handleSavedRecipe}
-                >
-                  {savedRecipe ? (
-                    <MdFavorite className="text-4xl" />
-                  ) : (
-                    <MdFavoriteBorder className="text-4xl" />
-                  )}
-                </div>
               </h2>
             </div>
-            <div class="relative w-full h-64">
+            <div class="relative w-full h-64 flex items-center">
+              <div className="cursor-pointer absolute text-4xl">
+                <div
+                  className={`mb-5 ${
+                    isRecipeSaved(recipe._id)
+                      && "pointer-events-none hidden"
+                  }`}
+                  onClick={() => saveRecipe(recipe._id)}
+                >
+                  <MdFavoriteBorder />
+                </div>
+                {/* <div className="">
+                  <FaRegBookmark />
+                </div> */}
+              </div>
               <img
                 src={recipe.imageUrl}
                 alt="Imagen"
-                class="h-full w-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
             <div className="">

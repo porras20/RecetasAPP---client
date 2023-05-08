@@ -19,7 +19,8 @@ export default function CreateRecipes() {
   const navigate = useNavigate()
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const {name, value } = e.target;
+    console.log(name);
     setRecipe({ ...recipe, [name]: value });
   };
 
@@ -33,6 +34,11 @@ export default function CreateRecipes() {
   const addIngredient = () => {
     setRecipe({ ...recipe, ingredients: [...recipe.ingredients, ""] });
   };
+
+  const validateForm = (e) => {
+    e.preventDefault()
+    
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,7 +55,7 @@ export default function CreateRecipes() {
       <h2 className="text-3xl capitalize font-[Poppins] mb-5 font-bold text-gray-900">
         Create recipes
       </h2>
-      <form action="" className="" onSubmit={(e) => handleSubmit(e)}>
+      <form action="" className="" onSubmit={(e) => validateForm(e)}>
         <div className="flex mb-5 gap-5 justify-center">
           <div className="flex flex-col">
             <label
