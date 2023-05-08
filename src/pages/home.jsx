@@ -42,7 +42,6 @@ export default function Home() {
   // añadir dependiencias recipes
 
   const saveRecipe = async (recipeId) => {
-    console.log("si");
     try {
       const response = await axios.put("http://localhost:3001/recipes", {
         recipeId,
@@ -71,7 +70,7 @@ export default function Home() {
               {savedRecipes.includes(recipe._id) && <h2>Alredy saved</h2>}
             </div>
             <div className="w-full flex justify-center">
-              <h2 className="flex justify-center items-center gap-3 font-[Poppins] text-3xl capitalize font-bold text-gray-600 mt-5">
+              <h2 className="flex justify-center items-center gap-3 font-[Poppins] text-3xl capitalize font-bold text-gray-600">
                 {recipe.name} <BiDish />
               </h2>
             </div>
@@ -79,8 +78,7 @@ export default function Home() {
               <div className="cursor-pointer absolute text-4xl">
                 <div
                   className={`mb-5 ${
-                    isRecipeSaved(recipe._id)
-                      && "pointer-events-none hidden"
+                    isRecipeSaved(recipe._id) && "pointer-events-none hidden"
                   }`}
                   onClick={() => saveRecipe(recipe._id)}
                 >
